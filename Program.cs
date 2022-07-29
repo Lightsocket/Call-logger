@@ -1,17 +1,16 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
-using DocumentFormat.OpenXml.Spreadsheet;
-using member;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 
+
 namespace Call_logger
 {
     class Program
     {
-        static string Main(string[] args)
+        static void Main(string[] args)
         {
             List<Member> memberList = ReadMembers();
             {
@@ -20,42 +19,38 @@ namespace Call_logger
                 int CallLength = 0;
                 string Resolved;
                 string userInput;
-                int memberId = 0;
+                string memberId = "0";
 
 
 
 
                 do
                 {
-                    Console.WriteLine("Do you need to document a new call? Please type 'yes' or 'no'. ");
+                    Output();
                     userInput = Console.ReadLine();
-                    { 
-                        case "no";
-                        new Member();
-                        break;
-                    }
 
-                    if (userInput != "no") ;
+
+                    if (userInput != "no" && userInput != "exit")
                     {
                         member = new Member();
                         Console.WriteLine("Please enter the first name of your caller.");
                         member.MemberName = Console.ReadLine();
                         Console.WriteLine("Please enter the member ID for your member.");
                         member.memberId = Console.ReadLine();
-                        Console.WriteLine("Please enter the lenght of your call in minutes.");
-                        member.CallLength = Console.ReadLine();
+                        Console.WriteLine("Please enter the length of your call in minutes.");
+                        member.CallLength = int.Parse(Console.ReadLine());
                         Console.WriteLine("Was the issue resolved?");
                         member.Resolved = Console.ReadLine();
                         memberList.Add(member);
 
                     }
-                    else
+                    else if (userInput != "exit")
 
                     {
                         int counter = 1;
-                        foreach (Member member in memberList)
+                        foreach (Member m in memberList)
                         {
-                            Console.WriteLine(counter.ToString() + ", " + MemberName + " " + memberId + " " + CallLength + " call resolved: " + Resolved + " .");
+                            Console.WriteLine(counter.ToString() + ", " + m.MemberName + " " + m.memberId + " " + m.CallLength + " call resolved: " + m.Resolved + " .");
 
                         }
 
@@ -100,18 +95,22 @@ namespace Call_logger
 
         }
         public static void WriteMembers(List<Member> memberList)
+
         {
             using (var writer = new StreamWriter("MemberList.csv"))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
-                csv.WriteRecords(members);
+                csv.WriteRecords(memberList);
             }
-            public static List<Member> ReadMembers()
-            {
 
-                var CSVConfig = new CsvConfiguration(CultureInfo.CurrentCulture);
-                using var StreamReader = File.OpenText("MemberList.csv");
-                using var csvReader = new CsvReader(StreamReader, CSVConfig);
+        }
+        public static List<Member> ReadMembers()
+        {
+
+            var CSVConfig = new CsvConfiguration(CultureInfo.CurrentCulture);
+            using (var streamReader = File.OpenText("MemberList.csv"))
+            using (var csvReader = new CsvReader(streamReader, CSVConfig))
+            {
                 string GetData;
                 var isLineOne = true;
                 List<Member> memberList = new List<Member>();
@@ -129,13 +128,13 @@ namespace Call_logger
                     {
                         Member member = new Member();
                         string Name;
-                        int Id;
+                        string Id;
                         string Resolved;
-                        string calllength;
+                        int calllength;
                         csvReader.TryGetField<string>(0, out Name);
-                        csvReader.TryGetField<int>(1, out Id);
+                        csvReader.TryGetField<string>(1, out Id);
                         csvReader.TryGetField<string>(2, out Resolved);
-                        csvReader.TryGetField<string>(3, out calllength);
+                        csvReader.TryGetField<int>(3, out calllength);
                         member.MemberName = Name;
                         member.memberId = Id;
                         member.Resolved = Resolved;
@@ -148,15 +147,25 @@ namespace Call_logger
 
 
                 }
-                StreamReader.Close();
+                streamReader.Close();
                 csvReader.Dispose();
                 return memberList;
 
 
             }
+
+
+
+
+
+
+
         }
 
-
+        public static void Output()
+        {
+            Console.WriteLine("Do you need to document a new call? Please type 'yes' or 'no'. OR Type exit to finish.");
+        }
 
 
 
