@@ -63,7 +63,7 @@ namespace Call_logger
 
                         Console.WriteLine("Which member would you like to view?");
                         var v = Convert.ToInt32((Console.ReadLine()));
-                        Console.WriteLine("Okay, " + memberList[v - 1].MemberName + " with Member ID: " + memberList[v - 1].memberId + " had a call length of " + memberList[v - 1].CallLength + " minutes. Was there issue resolved? " + memberList[v - 1].Resolved +
+                        Console.WriteLine("Okay, " + memberList[v - 1].MemberName + " with Member ID: " + memberList[v - 1].memberId + " had a call length of " + memberList[v - 1].CallLength + " minutes. Was their issue resolved? " + memberList[v - 1].Resolved +
                             " ~~If this member's inquiry is not resolved please call them back by Friday. Which is in " + daysUntilFriday + " days.");
 
 
