@@ -33,14 +33,14 @@ namespace Call_logger
                     if (userInput != "no" && userInput != "exit")
                     {
                         member = new Member();
-                        Console.WriteLine("Please enter the first name of your caller.");
+                        Console.WriteLine("Please enter the name of your caller.");
                         member.MemberName = Console.ReadLine();
                         Console.WriteLine("Please enter the member ID for your member.");
                         member.memberId = Console.ReadLine();
-                        Console.WriteLine("Please enter the length of your call in minutes.");
-                        member.CallLength = int.Parse(Console.ReadLine());
                         Console.WriteLine("Was the issue resolved?");
                         member.Resolved = Console.ReadLine();
+                        Console.WriteLine("Please enter the length of your call in minutes.");
+                        member.CallLength = int.Parse(Console.ReadLine());
                         memberList.Add(member);
 
                     }
@@ -50,18 +50,22 @@ namespace Call_logger
                         int counter = 1;
                         foreach (Member m in memberList)
                         {
-                            Console.WriteLine(counter.ToString() + ", " + m.MemberName + " " + m.memberId + " " + m.CallLength + " call resolved: " + m.Resolved + " .");
+                            Console.WriteLine(counter.ToString() + ".  Members Name: " + m.MemberName);
+                            counter++;
+
+
+
 
                         }
-
                         DateTime today = DateTime.Today;
                         int daysUntilFriday = ((int)DayOfWeek.Friday - (int)today.DayOfWeek + 7) % 7;
                         DateTime nextFriday = today.AddDays(daysUntilFriday);
 
-
                         Console.WriteLine("Which member would you like to view?");
                         var v = Convert.ToInt32((Console.ReadLine()));
-                        Console.WriteLine("If this member's inquiry is not resolved please call them back by Friday. Which is in " + daysUntilFriday + " days.");
+                        Console.WriteLine("Okay, " + memberList[v - 1].MemberName + " with Member ID: " + memberList[v - 1].memberId + " had a call length of " + memberList[v - 1].CallLength + " minutes. Was there issue resolved? " + memberList[v - 1].Resolved +
+                            " ~~If this member's inquiry is not resolved please call them back by Friday. Which is in " + daysUntilFriday + " days.");
+
 
 
 
@@ -129,16 +133,17 @@ namespace Call_logger
                         Member member = new Member();
                         string Name;
                         string Id;
-                        string Resolved;
                         int calllength;
+                        string Resolved;
                         csvReader.TryGetField<string>(0, out Name);
                         csvReader.TryGetField<string>(1, out Id);
-                        csvReader.TryGetField<string>(2, out Resolved);
-                        csvReader.TryGetField<int>(3, out calllength);
+                        csvReader.TryGetField<int>(2, out calllength);
+                        csvReader.TryGetField<string>(3, out Resolved);
                         member.MemberName = Name;
                         member.memberId = Id;
-                        member.Resolved = Resolved;
                         member.CallLength = calllength;
+                        member.Resolved = Resolved;
+                        ;
 
                         memberList.Add(member);
 
